@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common/layout::head(title='票据列表')"/>
+</head>
+<body>
+<!--导航栏-->
+<header th:replace="common/layout::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside th:replace="common/layout::side_menu"></aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div th:replace="common/layout::breadcrumb(subpath='票据列表')"></div>
+            <a class="btn btn-primary" style="margin: 5px;" th:href="@{/ticket/add}"> <i
+                    class="fa fa-plus"></i> 添加票据</a>
+            <!--            内容显示主要面板-->
+         <h2>示例页面</h2>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<div th:replace="common/layout::footer"></div>
+</body>
+<script>
+    function deleteTicket(id) {
+        if (confirm("是否确定删除记录") == true) {
+            // alert(id)
+            window.location.href = "/ticket/delete/" + id;
+        }
+    }
+</script>
+</html>

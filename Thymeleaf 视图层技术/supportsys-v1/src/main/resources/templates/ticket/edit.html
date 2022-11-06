@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common/layout::head(title='票据列表')"/>
+</head>
+<body>
+<!--导航栏-->
+<header th:replace="common/layout::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside th:replace="common/layout::side_menu"></aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div th:replace="common/layout::breadcrumb(subpath='编辑票据')"></div>
+            <!--            内容显示主要面板-->
+            <div class="card"  >
+                <div class="card-header">
+                    <span class="font-weight-bold" style="font-size: 20px">编辑票据—ID# </span>
+                    <a class="btn btn-primary btn-sm float-right" th:href="@{/ticket}"> <i class="fa fa-list"></i>返回列表
+                    </a>
+                </div>
+                <div class="card-body">
+                    <form class="needs-validation"    novalidate id="ticketForm">
+                        <!--                        使用隐藏字段传送id-->
+                        <input type="text" hidden name="id"  >
+                        <input type="text" hidden name="creator"  >
+                        <div class="mb-3">
+                            <label for="title">标题 <span class="text-muted">(必填)</span></label>
+                            <input type="text"   class="form-control col-md-6"
+                                   id="title"
+                                   placeholder="请输入票据标题">
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyName">公司名称 <span class="text-muted">(必填)</span></label>
+                            <input type="text"  class="form-control col-md-6"
+                                   id="companyName" placeholder="请输入公司名称">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="money">金额<span class="text-muted">(必填)</span></label>
+                                <input type="text"   class="form-control" id="money"
+                                       placeholder="请输入金额" value=""
+                                       required="">
+                            </div>
+                            <div class="col-md-5 mb-3">
+                                <label for="ticketType">票据类型</label>
+                                <!--                                调用后台的枚举型方法-->
+                                <select class="custom-select d-block w-100" id="ticketType" name="ticketType"
+                                        required="">
+                                    <option disabled>请选择</option>
+                                    <option th:each="item : ${ticketType}" th:value="${item.code}" th:text="${item.value}">
+                                    <option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ticketBody">内容</label>
+                            <textarea class="form-control" id="ticketBody"  
+                                      rows="5">购买办公用品、服务器1批，共10000元..</textarea>
+                            </textarea>
+                        </div>
+<!--                        提交的按钮-->
+                        <div class="row">
+                            <button onclick="alert('333')" class="offset-9 col-md-1 btn btn-warning "
+                                    style="margin-right: 15px">重置
+                            </button>
+                            <button class=" col-md-1  btn btn-primary"
+                                    type="submit">保存
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<div th:replace="common/layout::footer"></div>
+</body>
+</html>

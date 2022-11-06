@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common/layout::head(title='票据列表')"/>
+</head>
+<body>
+<!--导航栏-->
+<header th:replace="common/layout::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside th:replace="common/layout::side_menu"></aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div th:replace="common/layout::breadcrumb(subpath='票据详情')"></div>
+            <!--            内容显示主要面板-->
+            <div class="card" th:object="${ticket}">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">票据ID号# <span th:text="*{id}" }</h4></h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>企业名字：<span th:text="*{company}">  </span>
+                        </li><p></p>
+                        <li>总金额：<span th:text="*{money}"></span></li><p></p>
+                        <li>主题： <span th:text="*{title} "></span></li><p></p>
+                        <li>票据类型：<span th:text="${@frontUtils.convertTicketType(ticket.ticketType)}"></span></li><p></p>
+                        <li>主要内容：<span th:text="*{body}"></span></li><p></p>
+                        <li> 票据状态：<span th:text="*{status}"></span></li><p></p>
+                        <li> 提交者：<span th:text="*{creator}"></span></li><p></p>
+                        <li> 提交时间：<span th:text="*{createdTime}"></span></li><p></p>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-warning" style="margin: 5px;" th:href="@{'/ticket/edit/'+ ${ticket.id}}"> <i
+                            class="fa fa-edit"></i> 编辑票据</a>
+                    <a class="btn btn-primary" style="margin: 5px;" th:href="@{/ticket}"> <i
+                            class="fa fa-list"></i> 返回列表</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<div th:replace="common/layout::footer"></div>
+</body>
+</html>

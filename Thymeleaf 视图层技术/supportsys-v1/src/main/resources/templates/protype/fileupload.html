@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/assets/fonts/font-awesome.min.css"/>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/assets/css/toastr.min.css"/>
+    <link rel="stylesheet"
+          href="../../static/site/css/mysite.css"/>
+</head>
+<body>
+<!--导航栏-->
+<header class="navbar navbar-expand-<!--md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#"-->>领航票据管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">主页 <span class="sr-only">
+                    (current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">链接1</a>
+            </li>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text"
+                       placeholder="查询关键词"
+                       aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit">搜索
+                </button>
+            </form>
+        </ul>
+        <a href="#" class="btn btn-outline-success my-2 my-sm-0"
+           style="margin-right: 5px"
+           type="submit">登录</a> <a href="#"
+                                   class="btn btn-outline-success my-2 my-sm-0"
+                                   type="submit">注册</a>
+    </div>
+</header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <!--面包屑-->
+    <div class="breadcrumb" style="margin-bottom: 0">
+        <a class="breadcrumb-item" href="#">主页</a>
+        <a class="breadcrumb-item" href="#">票据详情</a>
+    </div>
+    <a class="btn btn-primary" style="margin: 5px;" href="v1.0/list.html"> <i
+            class="fa fa-list"></i> 返回列表</a>
+    <div class="content">
+     <div class="row">
+         <div class="col-md-2"></div>
+         <div class="card-sm col-md-8 " >
+             <div class="card-header bg-success text-white">
+                 <h4 class="my-0 font-weight-normal">文件上传</h4>
+             </div>
+             <div class="card-body">
+                 <label for="file2">文件上传</label>
+                 <input type="file" class="form-control custom-file" id="file2"/>
+
+             </div>
+             <div class="card-footer">
+                 <a class="btn btn-warning" style="margin: 5px;" href="#" > <i
+                         class="fa fa-edit"></i> 编辑票据</a>
+             </div>
+         </div>
+     </div>
+    </div>
+    <form id="form">
+        <div class="form-group">
+            <label >无刷文件上传</label>
+            <input type="button" value="添加文件" onclick="add()"/>
+            <div id="file" class="form-control" th:value="文件上传区域">  </div>
+        </div>
+        <input id="submit" type="button" value="上传" onclick="ajaxUpload()"
+               style="display: none;margin-top: 10px;"/>
+    </form>
+
+</main>
+<!//- 页面主体--->
+<footer class="footer mt-auto py-3">
+    <div class="text-center">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+
+<script src="../../static/bootstrap4/js/jquery.min.js"></script>
+<script src="../../static/bootstrap4/js/bootstrap.min.js"></script>
+<script src="../../static/bootstrap4/js/bootstrap.bundle.min.js"></script>
+</footer>
+
+    <script type="text/javascript">
+        function ajaxUpload() {
+            var form =new FormData();
+            // 获取选择的文件
+            $.each($('input[name="files"]'), function (index, item) {
+                form.append("files", item.files[0])
+            });
+            $.ajax({
+                method: 'post',
+                url: '/ajaxUploadFile',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    //成功返回触发的方法
+                    alert(res.msg);
+                },
+                //请求失败触发的方法
+                error:function(){
+                    console.log("ajax请求失败");
+                }
+            })
+        }
+    // 动态添加上传按钮
+    function add(){
+        var innerdiv = "<div>" +
+            "<input type='file' style='margin: 5px;' name='files' required='required'>" +
+            "<input type='button' value='删除' onclick='remove(this)'>" +
+            "</div>";
+        $("#file").append(innerdiv);
+        // 打开上传按钮
+        $("#submit").css("display","block");
+    }
+    // 删除当前行<div>
+    function remove(obj) {
+        $(obj).parent().remove();
+        if($("#file div").length ==0){
+            $("#submit").css("display","none");
+        }
+    }
+
+</script>
+</body>
+</html>

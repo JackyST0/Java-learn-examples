@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="../../../static/bootstrap4/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="../../../static/bootstrap4/assets/fonts/font-awesome.min.css"/>
+    <link rel="stylesheet"
+          href="../../../static/bootstrap4/assets/css/toastr.min.css"/>
+    <link rel="stylesheet" href="../../../static/site/css/mysite.css"/>
+    <!--    加载metisMenu所用样式-->
+    <link rel="stylesheet" href="../../../static/bootstrap4/assets/metismenu/metisMenu.min.css"/>
+    <link rel="stylesheet" href="../../../static/site/css/mm-vertical.css"/>
+</head>
+<body>
+<!--导航栏-->
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">领航票据管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">主页 <span class="sr-only">
+                    (current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">链接1</a>
+            </li>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text"
+                       placeholder="查询关键词"
+                       aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit">搜索
+                </button>
+            </form>
+        </ul>
+        <a href="#" class="btn btn-outline-success my-2 my-sm-0"
+           style="margin-right: 5px"
+           type="submit">登录</a> <a href="#"
+                                   class="btn btn-outline-success my-2 my-sm-0"
+                                   type="submit">注册</a>
+    </div>
+</header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside class="col-md-2 my-aside">
+            <nav class="sidebar-nav">
+                <ul id="menu">
+                    <li class="">
+                        <a href="#" aria-expanded="false">
+                            <i class="fa fa-home fa-fw fa-lg"></i>主页</a>
+                    </li>
+                    <li class="mm-active">
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-ticket fa-fw fa-lg"></i>票据管理</a>
+                        <ul>
+                            <li><a href="#">添加票据</a></li>
+                            <li><a href="#">票据列表</a></li>
+                            <li><a href="#">票据查询</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div class="breadcrumb bg-white" style="margin-bottom: 0">
+                <a class="breadcrumb-item" href="#"><i class="fa fa-dashboard fa-fw"></i>主页</a>
+                <a class="breadcrumb-item" href="#">票据详情</a>
+            </div>
+            <!--            内容显示主要面板-->
+            <div class="card">
+                <div class="card-header" style="padding: 8px"><i class="fa fa-fw fa-plus"></i>填写票据信息
+                    <a class="btn btn-primary btn-sm float-right" href="./list.html"> <i
+                            class="fa fa-list"></i> 返回列表</a>
+                </div>
+                <div class="card-body">
+                    <form class="needs-validation" action="" novalidate id="ticketForm">
+
+
+                        <div class="form-group row">
+                            <label for="subject"  class="col-md-2  col-form-label">票据主题</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="subject" required minlength="4">
+                                <div class="invalid-feedback">票据主题不允许为空,不能小于4个字符!</div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label for="email"  class="col-md-2  col-form-label">电子邮箱</label>
+                            <div class="col-md-10">
+                                <input type="email" class="form-control" id="email" required >
+                                <div class="invalid-feedback">请输入合法的email地址!</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="count"  class="col-md-2  col-form-label">票据数</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" id="count" min="1" max="20" required>
+                                <div class="invalid-feedback">请输入合法的整数!</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="money"  class="col-md-2  col-form-label">票据金额</label>
+                            <div class="col-md-10">
+                                <input type="number" class="form-control" id="money" min="0" step="0.01" required>
+                                <div class="invalid-feedback">请输入合法的金额!</div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cellphone"  class="col-md-2  col-form-label">手机号</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" id="cellphone" required pattern="\d{11}">
+                                <div class="invalid-feedback">请输入合法的手机号!</div>
+                            </div>
+                        </div>
+
+                        <hr class="mb-4">
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">提交票据
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<footer class="footer mt-auto py-3">
+    <div class="text-center">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+    <script src="../../../static/bootstrap4/js/jquery.min.js"></script>
+    <script src="../../../static/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="../../../static/bootstrap4/js/bootstrap.bundle.min.js"></script>
+    <script src="../../../static/bootstrap4/assets/metismenu/metisMenu.js"></script>
+</footer>
+<script>
+    $(function () {
+        $('#menu').metisMenu();
+        checkForm();
+    })
+    // 表单输入框数据校验
+    function checkForm() {
+        $("#ticketForm").submit(function (event) {
+            const f = $(this)  //获取当前对象
+            if (f[0].checkValidity() === false) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            f.addClass("was-validated")
+        })
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="../../../static/assets/bootstrap4/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="../../../static/assets/fonts/font-awesome.min.css"/>
+
+    <link rel="stylesheet" href="../../../static/site/css/mysite.css"/>
+    <!--    加载metisMenu所用样式-->
+    <link rel="stylesheet" href="../../../static/assets/metismenu/metisMenu.min.css"/>
+    <link rel="stylesheet" href="../../../static/assets/metismenu/mm-vertical.css"/>
+</head>
+<body>
+<!--导航栏-->
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">领航票据管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+
+
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text"
+                   placeholder="查询关键词"
+                   aria-label="Search">
+            <button class="btn
+             btn-warning my-2 my-sm-0"
+                    type="submit">搜索
+            </button>
+        </form>
+        <a href="#" class="btn btn-outline-success my-2 my-sm-0"
+           style="margin-right: 5px"
+           type="submit">登录</a> <a href="#"
+                                   class="btn btn-outline-success my-2 my-sm-0"
+                                   type="submit">注册</a>
+    </div>
+</header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside class="col-md-2 my-aside">
+            <nav class="sidebar-nav">
+                <ul id="menu">
+                    <li class="">
+                        <a href="#" aria-expanded="false">
+                            <i class="fa fa-home fa-fw fa-lg"></i>主页</a>
+                    </li>
+                    <li class="mm-active">
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-ticket fa-fw fa-lg"></i>票据管理</a>
+                        <ul>
+                            <li><a href="#">添加票据</a></li>
+                            <li><a href="#">票据列表</a></li>
+                            <li><a href="#">票据查询</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div class="breadcrumb bg-white" style="margin-bottom: 0">
+                <a class="breadcrumb-item" href="#"><i class="fa fa-dashboard fa-fw"></i>主页</a>
+                <a class="breadcrumb-item" href="#">票据详情</a>
+            </div>
+            <a class="btn btn-primary" style="margin: 5px;" href="./add.html"> <i
+                    class="fa fa-plus"></i> 添加票据</a>
+            <!--            内容显示主要面板-->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>序號</th>
+                    <th>票据Id</th>
+                    <th>企业名</th>
+                    <th>总金额</th>
+                    <th>主题</th>
+                    <th>类型</th>
+                    <th>提交时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>${s.count}</td>
+                    <td>${ticket.id}</td>
+                    <td>${ticket.companyName}</td>
+                    <td>${ticket.money}</td>
+                    <td>${ticket.subject}</td>
+                    <td>${ticket.type}</td>
+                    <td>${ticket.submitDate}</td>
+                    <td>
+
+                        <a class="btn btn-sm btn-success"
+                           href="view.html?id=${ticket.id}">
+                            <i class="fa fa-ticket"></i> 详情</a>
+                        <a href="./audit?id=${ticket.id}"
+                           class="btn btn-sm btn-primary">
+                            <i class="fa fa-check"></i> 审核</a>
+                        <a href="./delete?id=${ticket.id}"
+                           class="btn btn-sm btn-danger">
+                            <i class="fa fa-remove"></i> 删除</a>
+                        <a href="edit.html?id=${ticket.id}"
+                           class="btn btn-sm btn-warning">
+                            <i class="fa fa-edit"></i> 编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<footer class="footer mt-auto py-3">
+    <div class="text-center">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+    <script src="../../../static/assets/jquery/jquery.min.js"></script>
+    <script src="../../../static/assets/bootstrap4/bootstrap.bundle.min.js"></script>
+    <script src="../../../static/assets/metismenu/metisMenu.js"></script>
+</footer>
+<script>
+    $(function () {
+        $('#menu').metisMenu();
+    })
+</script>
+</body>
+</html>

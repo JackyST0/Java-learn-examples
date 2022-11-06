@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/assets/fonts/font-awesome.min.css"/>
+    <link rel="stylesheet"
+          href="../../static/bootstrap4/assets/css/toastr.min.css"/>
+    <link rel="stylesheet" href="../../static/site/css/mysite.css"/>
+    <!--    加载metisMenu所用样式-->
+    <link rel="stylesheet" href="../../static/bootstrap4/assets/metismenu/metisMenu.min.css"/>
+    <link rel="stylesheet" href="../../static/site/css/mm-vertical.css"/>
+</head>
+<body>
+<!--导航栏-->
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">领航票据管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">主页 <span class="sr-only">
+                    (current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">链接1</a>
+            </li>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text"
+                       placeholder="查询关键词"
+                       aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit">搜索
+                </button>
+            </form>
+        </ul>
+        <a href="#" class="btn btn-outline-success my-2 my-sm-0"
+           style="margin-right: 5px"
+           type="submit">登录</a> <a href="#"
+                                   class="btn btn-outline-success my-2 my-sm-0"
+                                   type="submit">注册</a>
+    </div>
+</header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside class="col-md-2 my-aside">
+            <nav class="sidebar-nav">
+                <ul id="menu">
+                    <li class="">
+                        <a href="#" aria-expanded="false">
+                            <i class="fa fa-home fa-fw fa-lg"></i>主页</a>
+                    </li>
+                    <li class="mm-active">
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-ticket fa-fw fa-lg"></i>票据管理</a>
+                        <ul>
+                            <li><a href="#">添加票据</a></li>
+                            <li><a href="#">票据列表</a></li>
+                            <li><a href="#">票据查询</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div class="breadcrumb bg-white" style="margin-bottom: 0">
+                <a class="breadcrumb-item" href="#"><i class="fa fa-dashboard fa-fw"></i>主页</a>
+                <a class="breadcrumb-item" href="#">票据详情</a>
+            </div>
+<!--            内容显示主要面板-->
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">票据ID号#111</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li>企业名字：${ticket.companyName}</li>
+                        <li>总金额：${ticket.money}</li>
+                        <li>主题： ${ticket.subject}</li>
+                        <li>票据类型： ${ticket.subject}</li>
+                        <li>主要内容： ${ticket.body}</li>
+                        <li> 票据状态： ${ticket.status}</li>
+                        <li> 提交时间： ${ticket.status}</li>
+                        <li> 提交者： ${ticket.status}</li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <a class="btn btn-warning" style="margin: 5px;" href="#"> <i
+                            class="fa fa-edit"></i> 编辑票据</a>
+                    <a class="btn btn-primary" style="margin: 5px;" href="v1.0/list.html"> <i
+                            class="fa fa-list"></i> 返回列表</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<footer class="footer mt-auto py-3">
+    <div class="text-center">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+    <script src="../../static/bootstrap4/js/jquery.min.js"></script>
+    <script src="../../static/bootstrap4/js/bootstrap.min.js"></script>
+    <script src="../../static/bootstrap4/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/bootstrap4/assets/metismenu/metisMenu.js"></script>
+</footer>
+<script>
+    $(function () {
+        $('#menu').metisMenu();
+    })
+</script>
+</body>
+</html>
