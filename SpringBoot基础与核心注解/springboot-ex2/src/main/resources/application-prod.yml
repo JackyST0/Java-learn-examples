@@ -1,0 +1,14 @@
+
+
+
+server:
+  port: 8003
+
+
+global-config:
+  website_name: 领航科技公司票据管理系统
+  domain: www.linghang.com
+  version: 上线公开版本v1.0.0
+
+
+

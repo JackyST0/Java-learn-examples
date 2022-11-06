@@ -1,0 +1,14 @@
+
+
+
+server:
+  port: 8002
+
+
+global-config:
+  website_name: 领航科技公司票据管理系统
+  domain: www.test123.com
+  version: 内部测试版本v1.0.0
+
+
+

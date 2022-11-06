@@ -1,0 +1,14 @@
+
+
+
+server:
+  port: 8001
+
+
+global-config:
+  website_name: 领航科技公司票据管理系统
+  domain: www.dev123.com
+  version: 开发版本v1.0.0
+
+
+

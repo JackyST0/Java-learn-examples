@@ -1,0 +1,5 @@
+
+
+spring:
+  profiles:
+    active: dev    #表示当前激活版本为dev版本
