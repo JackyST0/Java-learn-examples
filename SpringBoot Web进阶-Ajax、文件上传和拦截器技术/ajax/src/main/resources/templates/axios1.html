@@ -1,0 +1,154 @@
+<!--演示使用ajax获取服务器数据-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Axios获取和提交数据</title>
+    <!--    引入bootstrap样式文件-->
+    <link rel="stylesheet" th:href="@{/assets/bootstrap-5.1.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container-fluid">
+    <h3>1.演示使用axios获取服务器数据</h3>
+    <button class="btn btn-outline-primary mb-3" onclick="getFile()">获取文件数据</button>
+    <button class="btn btn-outline-info mb-3" onclick="getJsonObject()">获取JSON对象</button>
+    <button class="btn-success btn mb-3" onclick="getJsonProps()">获取数据属性</button>
+    <button class="btn-warning btn mb-3" onclick="openModal()">ajax弹窗</button>
+    <div class="mb-3" id="ajaxBtn1"><h6>服务器响应结果</h6></div>
+    <textarea class="overflow-scroll" rows="12" cols="120" id="res1" wrap="hard" style="font: 18px Consolas;">
+            This is some text within a card body.
+    </textarea>
+    <hr>
+    <h3>2.演示使用axios提交数据到服务器</h3>
+    <form class="col-4" action="#" method="post" id="userForm">
+        <div class="mb-3">
+            <label for="inputUsername" class="form-label">用户名</label>
+            <input type="email" name="username" value="李强" class="form-control" id="inputUsername"
+                   aria-describedby="usernameTip">
+        </div>
+        <div class="mb-3">
+            <label for="inputEmail" class="form-label">Email地址</label>
+            <input type="text" name="email" value="liqiang@qq.com" class="form-control" id="inputEmail">
+        </div>
+        <div class="mb-3">
+            <label for="inputPhoneNumber" class="form-label">电话号码</label>
+            <input type="text" name="phoneNumber" value="13540999922" class="form-control"
+                   id="inputPhoneNumber">
+        </div>
+    </form>
+    <button class="btn-success btn mb-3" onclick="submitUserData()">使用Axios提交表单</button>
+</div>
+
+
+<!-- 弹出框 Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Axios远程获取数据</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!--            弹出框主体-->
+            <div class="modal-body" id="modal-body1">
+                ...
+            </div>
+            <!--            弹出框底部-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast " role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="..." class="rounded me-2" alt="...">
+            <strong class="me-auto">Bootstrap</strong>
+            <small>11 mins ago</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+    </div>
+</div>
+<!--js脚本-->
+<script src="/assets/bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/bootstrap-5.1.3/js/popper.min.js"></script>
+<script th:src="@{/assets/axios/axios.min.js}"></script>
+<script>
+    <!--    实现axios和后端服务器的ajax交互 -->
+    //获取后端指定文件内容
+    function getFile() {
+        // 返回一个promise对象
+       axios.get('/site/data/data.txt')
+        .then(res=>{
+            // 处理成功情况
+            console.log(res.data);
+            document.getElementById("res1").innerText=res.data;
+        })
+        .catch(err=>{
+            // 处理错误情况
+            console.log("axios请求失败...")
+        })
+    }
+
+    function getJsonObject() {
+       axios.get('/user/detail')
+        .then(res=>{
+            console.log(res.data);
+            // 显示数据
+            document.getElementById("res1").innerText=JSON.stringify(res.data.data);
+        })
+    }
+
+
+    function getJsonProps() {
+        axios.get('/user/detail')
+            .then(res => {
+                console.log(res.data.data);
+                //显示数据
+                const text = `ID:${res.data.data.id};\n用户名:${res.data.data.username};\n邮箱:${res.data.data.email}\n`
+                    + `电话号码:${res.data.data.phoneNumber}\n创建时间:${res.data.data.createdTime}\n`;
+                document.getElementById("res1").innerText = text;
+            })
+    }
+
+    /**
+     * 弹出模态框，加载服务器数据
+     */
+    function openModal() {
+        axios.get('site/js/ajax1.js')
+        .then(res=>{
+            // 显示数据
+            document.querySelector('#modal-body1').innerText=res.data;
+            var myModal=new bootstrap.Modal(document.getElementById('exampleModal'),{})
+            myModal.show();
+        })
+
+    }
+
+    /**
+     * 提交JSON格式数据
+     */
+    function submitUserData() {
+       axios.post('/user/add_json',{
+           username:document.querySelector('#inputUsername').value,
+           email:document.querySelector('#inputEmail').value,
+           phoneNumber:document.querySelector('#inputPhoneNumber').value
+       })
+            .then(res=>{
+                console.log(res.data);
+                // 显示数据
+                document.querySelector('#res1').innerHTML='Json数据提交成功，操作结果'+JSON.stringify(res.data.data);
+                var toastLiveExample=document.getElementById('liveToast')
+                var toast=new bootstrap.Toast(toastLiveExample)
+                toast.show()
+            })
+    }
+</script>
+</body>
+
+</html>

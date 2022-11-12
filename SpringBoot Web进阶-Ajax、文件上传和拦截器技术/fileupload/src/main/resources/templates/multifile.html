@@ -1,0 +1,33 @@
+<!--演示使用ajax获取服务器数据-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>多文件上传</title>
+    <!--    引入bootstrap样式文件-->
+    <link rel="stylesheet" th:href="@{/assets/bootstrap-5.1.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container-fluid">
+    <h3>1.演示多文件上传</h3>
+    <form class="col-4" th:action="@{/multifile_upload}" method="post" enctype="multipart/form-data" id="userForm">
+        <div class="mb-3">
+            <label for="formFile" class="form-label">多文件上传</label>
+            <input class="form-control" type="file" name="files" multiple id="formFile">
+        </div>
+        <button class="btn-primary btn mb-3">上传</button>
+    </form>
+<!--    显示上传成功的消息-->
+    <th:block th:if="${msg}!=null">
+    <div id="result">
+        <p class="text-success" th:text="${msg}"></p>
+        <th:block th:each="file,status:${fileList}">
+            <p><span th:text="${status.count}"></span>;文件名:<span th:text="${file.filename}"></span>;大小:<span th:text="${file.fileSize}"></span>;字节:<a th:href="@{${file.fileUrl}}">下载</a></p>
+        </th:block>
+    </div>
+    </th:block>
+</div>
+
+</body>
+
+</html>
