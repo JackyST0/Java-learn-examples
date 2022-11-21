@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace表示命名空间 -->
+<mapper namespace="com.javaee.mybatisbasic.mapper.StudentMapper">
+    <!--    定义sql代码片段-->
+    <!--    <sql id="selectAll">-->
+    <!--        select id, student_no, name, home_address, class_no, sex, birthday, enroll_time from student-->
+    <!--    </sql>-->
+
+ <select id="getById" resultType="com.javaee.mybatisbasic.entity.Student">
+     select * from student where id=#{id}
+ </select>
+    
+<insert id="add" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into student(student_no,name ,home_address,class_name,sex,birthday,enroll_time,status)
+    value (#{studentNo},#{name },#{homeAddress},#{className},#{sex},#{birthday},#{enrollTime},#{status})
+</insert>    
+
+<select id="listAll" resultType="com.javaee.mybatisbasic.entity.Student">
+    select * from student
+</select>   
+<!--    模糊查询-->
+      <select id="findLikeName" resultType="com.javaee.mybatisbasic.entity.Student">
+          select * from student
+          where name like CONCAT('%',#{name },'%')
+      </select>
+<!--删除-->
+    <delete id="deleteById">
+        delete from student where id =#{id}
+    </delete>
+<!--  动态条件查询  -->
+   <select id="findByNameAndClassNo" resultType="com.javaee.mybatisbasic.entity.Student">
+       select * from student
+        <where>
+            <if test="name!=null and name!=''">
+                and name like CONCAT('%',#{name},'%')
+            </if>
+            <if test="studentNo!=null and studentNo!=''">
+                and student_no like CONCAT('%',#{studentNo},'%')
+            </if>
+        </where>
+   </select>
+
+<!--    动态更新操作-->
+    <update id="update">
+        update student
+        <set>
+            <if test="studentNo !=null and studentNo!=''">
+                student_no=#{studentNo},
+            </if>
+            <if test="name !=null and name!=''">
+                name=#{name},
+            </if>
+            <if test="homeAddress !=null and homeAddress!=''">
+                home_address=#{homeAddress},
+            </if>
+<!--            <if test="classNo !=null and classNo!=''">-->
+<!--                class_no=#{classNo}-->
+<!--            </if>-->
+            <if test="sex !=null">
+                sex=#{sex},
+            </if>
+            <if test="birthday !=null">
+                birthday=#{birthday},
+            </if>
+            <if test="enrollTime !=null">
+                enroll_time=#{enrollTime}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <!--    批量插入-->
+    <insert id="batchInsert" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+        insert into student(student_no,name,home_address,sex, birthday, enroll_time, status) values
+        <!--        collcetion对应集合名称, item对应集合元素, separator表示分隔符-->
+        <foreach collection="list" item="s" separator=",">
+            (#{s.studentNo},#{s.name},#{s.homeAddress},#{s.sex}, #{s.birthday}, #{s.enrollTime},#{s.status})
+        </foreach>
+    </insert>
+
+
+    <!--批量删除-->
+    <delete id="batchDelete">
+        delete from student where id in (
+        <foreach collection="list" item="s" separator=",">
+            #{s.id}
+        </foreach>
+        )
+    </delete>
+
+</mapper>
