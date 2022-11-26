@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/head::head(title='角色管理')">
+</head>
+<body>
+<div id="app">
+    <!--头部导航栏-->
+    <header th:replace="/fragment/header::header"></header>
+    <!--//导航栏-->
+    <!--页面主体-->
+    <main class="container-fluid main">
+        <div class="row">
+            <!--    侧边导航栏-->
+            <aside th:replace="/fragment/sidebar::sidebar"></aside>
+            <!--        //ened of 侧边导航栏-->
+            <div class="col-md-10">
+                <!--面包屑-->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="user">主页</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">角色管理</li>
+                    </ol>
+                </nav>
+                <!--ened of 面包屑-->
+
+<!--                搜索栏-->
+                <div class="bg-light pt-1 pb-1 ps-2">
+                    角色英文名称: <input type="text" class="mb-2 me-3" id="role" placeholder="角色英文名称"
+                                v-model="queryParams.role">
+                    角色中文名称: <input type="text" class="mb-2 me-3" id="roleName"
+                                  v-model="queryParams.roleName" placeholder="角色中文名称">
+                    角色描述: <input type="text" class="mb-2 me-3" id="description"
+                                v-model="queryParams.description" placeholder="角色描述">
+                    <label for="roleStatus" class="mb-2 me-1">状态:</label>
+                    <select class="mb-2 mp-2 me-3" id="roleStatus"   v-model="queryParams.status">
+                        <option selected="" value="">选择</option>
+                        <option value="1">激活</option>
+                        <option value="0">禁用</option>
+                    </select>
+                    <button type="button" @click="query" class="btn btn-success  mb-2 me-2">
+                        <i class="fa fa-search fa-fw "></i>查找
+                    </button>
+                    <button type="button" @click="reset" class="btn btn-secondary mb-2 ">
+                        <i class="fa   fa-refresh fa-fw"></i>返回
+                    </button>
+                </div>
+<!--                end of 搜索栏-->
+                <!--   按钮工具栏-->
+                <a class="btn btn-primary me-1" href="#" @click="openAddModal"> <i
+                        class="fa fa-plus"></i> 添加用户</a>
+                <a class="btn btn-success me-1"  href="#" @click="getTableData"> <i
+                        class="fa fa-plus"></i> 重新加载</a>
+                <!-- end of   按钮工具栏-->
+                <!--     数据列表-->
+                <table class="table table-striped">
+                    <thead>
+                    <th>#</th>
+                    <th>角色英文名称</th>
+                    <th>角色中文名称</th>
+                    <th>角色描述</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>头像</th>
+                    <th>操作</th>
+                    </thead>
+                    <tr v-for="(role,index) in roleList">
+                        <td>{{index+1}}</td>
+                        <td>{{role.role}}</td>
+                        <td>{{role.roleName}}</td>
+                        <td>{{role.description}}</td>
+
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="flexSwitchCheckDefault"
+                                       v-model="role.status">
+                            </div>
+                        </td>
+                        <td>{{role.createdTime}}</td>
+
+                        <td><img src="/site/pic/avatar2.png" height="40"></td>
+                        <td><a class="link-danger me-1"  href="#"
+                               @click="del(index, role.id)">删除</a>
+                            <a class="link-success me-1"   href="#" @click="view(role.id)">查看
+                            </a>
+                            <a class="link-primary" href="#" @click="openEditModal(role.id)">编辑</a></td>
+                    </tr>
+                </table>
+                <!--  end of 数据列表 -->
+            </div>
+        </div>
+    </main>
+<!--     用户详情 Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!--            弹出框头部-->
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-file-photo-o text-primary" ></i>  详情</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!--            弹出框主体-->
+                <div class="modal-body">
+                    <br>角色英文名称：{{role.role}}<br>
+                    <br>角色中文名称：{{role.roleName}}<br>
+                    <br>角色描述：{{role.description}}<br>
+                    <br>状态：<span>{{role.status | statusFormat}}</span><br>
+                    <br>注册时间：{{role.createdTime}}<br>
+
+                </div>
+                <!--            弹出框底部-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    end of 用户详情-->
+    <!-- 用户编辑弹出框 Modal -->
+    <div class="modal fade " id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content ">
+                <!--            弹出框头部-->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-edit text-primary fa-lg" ></i>   编辑
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!--            弹出框主体-->
+                <div class="modal-body" id="modal-body1">
+                    <form class="needs-validation" novalidate>
+
+                        <label class="me-3 mb-2">角色英文名称:</label><input class="col-md-8" type="text"
+                                                                    v-model="role.role">
+                        <p></p>
+                        <label class="me-3 mb-2">角色中文名称:</label><input class="col-md-8" type="email"
+
+                                                                     v-model="role.roleName">
+                        <p></p>
+                        <label class="me-3 mb-2">角色描述:</label><input class="col-md-8" type="text"
+                                                                     v-model="role.description">
+                        <p></p>
+                        <label class="me-3 mb-2">状态:</label>
+                        <input type="radio" id="enable" v-model="role.status" value="1" />
+                        <label for="enable">激活</label>
+                        <input type="radio" id="disable" v-model="role.status" value="0" />
+                        <label for="disable">停用</label>
+                        <p></p>
+
+                    </form>
+                </div>
+                <!--            弹出框底部-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="update">更新</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of 用户编辑弹出框 Modal -->
+
+    <!-- 添加用户弹出框 Modal -->
+    <div class="modal fade " id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog ">
+            <div class="modal-content ">
+                <!--            弹出框头部-->
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fa fa-user text-primary fa-lg" ></i>  新增</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!--            弹出框主体-->
+                <div class="modal-body">
+                    <form class="needs-validation" novalidate>
+
+                        <label class="me-3 mb-2">角色英文名称:</label><input class="col-md-8" type="text"
+                                                                    v-model="addForm.role">
+                        <p></p>
+                        <label class="me-3 mb-2">角色中文名称:</label><input class="col-md-8" type="email"
+
+                                                                     v-model="addForm.roleName">
+                        <p></p>
+                        <label class="me-3 mb-2">角色描述:</label><input class="col-md-8" type="text"
+                                                                     v-model="addForm.description">
+                        <p></p>
+<!--                        <label class="me-3 mb-2">备注:</label><br><textarea v-model="addForm.remark" cols="40" rows="6"-->
+<!--                                                                          class="offset-2">-->
+<!--                    </textarea>-->
+                    </form>
+                </div>
+                <!--            弹出框底部-->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" @click="add">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end of 用户编辑弹出框 Modal -->
+</div>
+<!//- 页面主体--->
+<footer th:replace="/fragment/footer::footer">
+</footer>
+<script src="/site/js/role.js"></script>
+
+</body>
+</html>

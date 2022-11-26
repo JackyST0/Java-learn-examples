@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragment/head::head(title='票据列表')">
+</head>
+<body>
+<!--头部导航栏-->
+<header th:replace="/fragment/header::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside  th:replace="/fragment/sidebar::sidebar"></aside>
+        <!--        //ened of 侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">主页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">票据管理</li>
+                </ol>
+            </nav>
+            <a class="btn btn-primary" style="margin: 5px;" href="./add.html"> <i
+                    class="fa fa-plus"></i> 添加票据</a>
+            <!--     内容显示主要面板-->
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<footer   th:replace="/fragment/footer::footer" >
+</footer>
+</body>
+</html>
