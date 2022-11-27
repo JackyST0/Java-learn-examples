@@ -1,0 +1,107 @@
+<!--演示VUE的基本用法-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VUE例子2</title>
+    <!--    引入bootstrap样式文件-->
+    <link rel="stylesheet" th:href="@{/assets/bootstrap-5.1.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container-fluid" id="app">
+    <h4 class="mt-4">1.1条件渲染v-if指令</h4>
+    <h5 class="text-primary" v-if="role==='admin'"> 当前角色:管理员,具有审核功能
+        <button class="btn-warning btn-sm">审核</button>
+    </h5>
+    <h5 class="text-danger" v-else > 非管理员角色，没有审核权限</h5>
+    <button class="btn-success btn" @click="changeRole" >切换角色</button>
+    <p></p>
+
+
+    <h4>1.2 使用template结合v-if的实现方式</h4>
+    <template  v-if="role==='admin'">
+        <h5 class="text-primary"> 当前角色:管理员,具有审核功能
+            <button class="btn-warning btn-sm">审核</button>
+        </h5>
+    </template>
+    <template v-else>
+        <h5 class="text-danger"> 非管理员角色，没有审核权限</h5>
+    </template>
+    <p></p>
+
+    <h4>2.使用 v-for 实现表单动态渲染</h4>
+    <select v-model="books">
+        <option selected>请选择您喜欢的图书</option>
+        <!--        <optgroup label="请选择您喜欢的图书">-->
+        <option v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+        </option>
+    </select>
+    <br>
+    <span>当前选择: {{ books }}</span>
+    <p></p>
+    <h4>3.获取后台数据进行渲染</h4>
+    <br>用户名：{{user.username}} <br>
+    <br>电子邮箱：{{user.email}} <br>
+    <br>手机号码：{{user.phoneNumber}} <br>
+    <br>状态：<span>{{user.enabled | statusFormat}} </span><br>
+    <br>注册时间：{{user.createdTime}} <br>
+    <br>头像：<img v-bind:src="user.avatarUrl" height="90"><br>
+    <button class="btn-success btn" @click="getUserInfo" >获取用户信息</button>
+
+</div>
+
+
+<!--引入bootstrap5的js脚本-->
+<script src="/assets/bootstrap-5.1.3/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/bootstrap-5.1.3/js/popper.min.js"></script>
+<script th:src="@{/assets/axios/axios.min.js}"></script>
+<!--引入vue2的js文件-->
+<script th:src="@{/assets/vue/vue.js}"></script>
+<script>
+    <!--    使用new Vue()方法创建一个vue对象,实现和div的绑定,即div数据和vm对象的数据实现一一绑定-->
+    // Vue方法参数是一个json对象
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            role: 'admin' ,
+            books: [],
+            options: [
+                {text: '苏菲的世界', value: 'A'},
+                {text: '苏东坡传', value: 'B'},
+                {text: '量子宇宙', value: 'C'},
+                {text: '深度学习', value: 'D'},
+                {text: '爱因斯坦传', value: 'C'}
+            ],
+            user: {}
+
+        },
+        methods: {
+            changeRole: function () {
+                //使用this可以直接访问vue实例中数据对象
+                if(this.role === 'admin'){
+                    this.role = 'common';
+                }else{
+                    this.role = 'admin'
+                }
+            },
+            //获取后端用户信息并赋值为user
+            getUserInfo: function () {
+                 axios.get('/userInfo')
+                .then(res=>{
+                     this.user=res.data.data;
+                });
+            }
+        },
+        //定义过滤器,对数据进行格式转换
+        filters: {
+            statusFormat(status) {
+                return (status === true　? '激活'　: '未激活');
+            }
+        }
+    })
+
+</script>
+</body>
+
+</html>
