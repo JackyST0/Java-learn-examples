@@ -35,3 +35,43 @@
     - 掌握 Spring MVC 接收请求参数方式
     - 掌握 Spring MVC 页面跳转方式
 ----------
+6. ### Web进阶—拦截器技术、文件上传下载和JavaScript Ajax技术(Axios)版本
+    - 理解Ajax异步传输的原理和工作流程
+    - 掌握基于jquery的ajax数据读取和数据提交
+    - 掌握单文件、多文件和Ajax文件上传的实现方法
+    - 掌握文件下载技术
+    - 理解拦截器的工作原理并掌握拦截器的实现流程
+----------
+7. ### 持久层技术—SpringBoot 整合Mybatis
+    - 掌握整合 Spring Boot 与 Mybatis
+    - 掌握 Mybatis 的基本工作流程
+    - 掌握 Mybatis 的 XML 映射文件编写
+    - 掌握 Mybatis 的对象关联与 ResultMap 的使用
+    - 掌握 Mybatis 
+----------
+8. ### Mybatis对象关联
+    - 掌握Mybatis的一对一、一对多的对象关联查询
+    - 掌握Mybatis的ResultMap的使用
+    - 掌握VO的使用
+----------
+9. ### Mybatis分页插件pageHelper的使用
+    - 掌握PageHelper分页插件的使用
+    - 掌握Bootstrap table组件的基本用法
+----------
+10. ### 前后端分离前端技术Vue.js基础
+    - 掌握Vue的表单数据绑定
+    - 掌握Vue整合axios获取后端数据
+    - 掌握Vue的指令v-if, v-for的使用
+    - 理解vue过滤器功能
+----------
+11. ### 前后端分离的CRUD功能实现
+    - 理解前后端分离开发的工作流程
+    - 掌握实践开发中JavaEE后台的分层设计和封装
+    - 掌握单表的crud操作  
+----------
+12. ### 前后端分离的分页条件查询实现
+    - 掌握前后端分离的开发流程
+    - 掌握axios和后端的交互过程
+    - 理解分页的底层实现与SQL语句
+----------
+
