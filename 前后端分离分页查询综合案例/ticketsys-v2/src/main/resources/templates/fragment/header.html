@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--头部导航栏-->
+<header class="p-2 mb-3 border-bottom bg-dark">
+    <div class="container-fluid">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+
+            <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="#" class="nav-link px-2 text-warning h5">领航票据管理系统</a></li>
+                <li><a href="#" class="nav-link px-2 text-light">Menu1</a></li>
+                <li><a href="#" class="nav-link px-2 text-light">Menu2</a></li>
+                <li><a href="#" class="nav-link px-2 text-light">Menu3</a></li>
+            </ul>
+
+            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+            </form>
+
+            <div class="dropdown text-end">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1"
+                   data-bs-toggle="dropdown" aria-expanded="false">
+                    <img th:src="@{/site/pic/avatar1.png}" alt="mdo" width="32" height="32"
+                         class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#" onclick="logout()">登出</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        function logout() {
+            console.log("logout action...")
+            sessionStorage.clear();
+            // 跳转到登出url
+            window.open('/logout', '_self');
+        }
+    </script>
+</header>
+
+
+</html>

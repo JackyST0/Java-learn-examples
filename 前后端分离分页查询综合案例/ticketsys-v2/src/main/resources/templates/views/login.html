@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>用户登录</title>
+    <!--  引入共同的样式文件  -->
+    <th:block th:include="~{fragment/imports::imports}"></th:block>
+    <link th:href="@{/site/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+
+<main class="form-signin">
+    <div id="app">
+    <form>
+        <img class="mb-1" src="/site/pic/site.jpg" alt="" width="92">
+        <h1 class="h3 mb-4 font-weight-normal">欢迎登录</h1>
+        <div class="row mb-3">
+            <label for="username" class="col-sm-3 col-form-label">用户名:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="username" v-model="loginForm.username"
+                       placeholder="输入用户名" required autofocus>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <label for="password" class="col-sm-3 col-form-label">密码:</label>
+            <div class="col-sm-9">
+                <input type="password" id="password" v-model="loginForm.password" class="form-control mb-2"
+                       placeholder="输入密码" required>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="checkbox col-md-3 float-left mb-2 offset-3">
+                <label>
+                    <input type="checkbox" name="rememberMe" value="remember-me">记住我
+                </label>
+            </div>
+            <div class="col-md-5"><a href="/register">点击注册</a></div>
+        </div>
+        <button class="w-100 btn btn-lg btn-success " @click="login" type="button">登录</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+    </form>
+    </div>
+</main>
+<!--</div>-->
+<footer th:replace="/fragment/footer::commonjs">
+</footer>
+<script src="/site/js/login.js"></script>
+</body>
+</html>
