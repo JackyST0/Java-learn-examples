@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common/layout::head(title='票据列表')"/>
+</head>
+<body>
+<!--导航栏-->
+<header th:replace="common/layout::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside th:replace="common/layout::side_menu"></aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div th:replace="common/layout::breadcrumb(subpath='票据列表')"></div>
+            <a class="btn btn-primary text-light" style="margin: 5px;" onclick="openAddModal()"> <i
+                    class="fa fa-plus text-light"></i> 添加票据</a>
+            <!--            内容显示主要面板-->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>创建者</th>
+                    <th>企业名</th>
+                    <th>总金额</th>
+                    <th>主题</th>
+                    <th>类型</th>
+                    <th>状态</th>
+                    <th>提交时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ticket, status : ${ticketList}">
+                    <td th:text="${status.count}">${status.count}</td>
+                    <td th:text="${ticket.creator}">${ticket.creator}</td>
+                    <td th:text="${ticket.company}">${ticket.company}</td>
+                    <td th:text="${ticket.money}"></td>
+                    <td th:text="${ticket.title}"></td>
+                    <td th:text="${@frontUtils.convertTicketType(ticket.ticketType)}"></td>
+                    <td th:text="${ticket.status}"></td>
+                    <td th:text="${ticket.createdTime}"></td>
+                    <td>
+                        <a class="btn btn-sm btn-success text-light"
+                           th:onclick="openViewModal([[${ticket.id}]])">
+                            <i class="fa fa-ticket"></i> 详情</a>
+                        <a th:href="@{'/ticket/audit/'+ ${ticket.id}}"
+                           class="btn btn-sm btn-primary text-light">
+                            <i class="fa fa-check"></i> 审核</a>
+                        <a th:onclick="deleteTicket([[${ticket.id}]])"
+                           class="btn btn-sm btn-warning ">
+                            <i class="fa fa-remove"></i> 删除</a>
+                        <a th:onclick="openEditModal([[${ticket.id}]])"
+                           class="btn btn-sm btn-info text-light">
+                            <i class="fa fa-edit"></i> 编辑</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+
+
+<!--添加模态框-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-xl">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel"><i class="fa fa-plus text-primary"></i> 添加票据</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="addModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑的模态框-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-xl">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <!--            <div class="modal-header">-->
+            <!--                <h5 class="modal-title" id="editModalLabel"><i class="fa fa-plus text-primary"></i> 编辑票据</h5>-->
+            <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+            <!--                    <span aria-hidden="true">&times;</span>-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <div class="modal-body" id="editModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--详情模态框-->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog   modal-xl">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <!--            <div class="modal-header">-->
+            <!--                <h5 class="modal-title" id="viewModalLabel"><i class="fa fa-plus text-primary"></i> 票据详情</h5>-->
+            <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+            <!--                    <span aria-hidden="true">&times;</span>-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <div class="modal-body" id="viewModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/layout::footer"></div>
+</body>
+<script>
+    let viewUrl = '/ticket/';
+    let addUrl = '/ticket/add';
+    let editUrl = '/ticket/edit/';
+    let delUrl = '/ticket/delete/';
+
+    /**
+     * 删除记录
+     */
+    function deleteTicket(id) {
+        if (confirm("是否确定删除记录") == true) {
+            let config = {
+                method: 'get',
+                url: delUrl + id,
+                success: function (res) {
+                    Message.success("票据删除成功!");
+                    //重新刷新当前页面
+                    setTimeout(()=>window.open("/ticket","_self"), 500);
+                }
+            }
+            $.ajax(config);
+        }
+    }
+
+    /**
+     * 打开添加对话框，并远程加载添加界面
+     */
+    function openAddModal() {
+        // alert("test")
+        let config = {
+            method: 'get',
+            url: addUrl,
+            success: function (res) {
+                $('#addModalBody').html(res);
+                $('#addModal').modal('show');
+            },
+            error: function () {
+                console.log(' ajax 错误');
+            }
+        }
+        $.ajax(config);
+    }
+
+    /**
+     * 查看
+     */
+    function openViewModal(id) {
+        // alert("test")
+        let config = {
+            method: 'get',
+            url: viewUrl + id,
+            success: function (res) {
+                $('#viewModalBody').html(res);
+                $('#viewModal').modal('show');
+            }
+        }
+        $.ajax(config);
+    }
+
+    function openEditModal(id) {
+        let config = {
+            method: 'get',
+            url: editUrl + id,
+            success: function (res) {
+                $('#editModalBody').html(res);
+                $('#editModal').modal('show');
+            }
+        }
+        $.ajax(config);
+    }
+</script>
+
+
+</html>

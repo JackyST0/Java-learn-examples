@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="common/layout::head(title='用户列表')"/>
+</head>
+<body>
+<!--导航栏-->
+<header th:replace="common/layout::header"></header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside th:replace="common/layout::side_menu"></aside>
+        <!--        //侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div th:replace="common/layout::breadcrumb(subpath='用户列表')"></div>
+
+            <div class="cartd">
+                <div id="userSearchForm" class="card-body">
+                    <div class="form-inline">
+                        <input type="text" class="form-control col-md-2 mb-2 mr-sm-2" id="username" name="username"
+                               placeholder="用户名">
+                        <input type="text" class="form-control col-md-2 mb-2 mr-sm-2" id="email" name="email"
+
+                               placeholder="Email地址">
+                        <input type="text" class="form-control col-md-2 mb-2 mr-sm-2" id="phoneNumber"
+                               name="phoneNumber"
+                               placeholder="手机号码">
+                        <label for="userStatus" class="mb-2 mr-sm-2">状态</label>
+                        <select class="custom-select mb-2 mr-sm-5 col-md-1" name="enable"
+                                id="userStatus">
+                            <option selected="" value="">选择</option>
+                            <option value="1">激活</option>
+                            <option value="0">禁用</option>
+                        </select>
+                        <button type="button" onclick="queryUsers();" class="btn btn-success  mb-2 mr-sm-3">查找
+                        </button>
+                        <button type="button" onclick="resetSearchForm();" class="btn btn-secondary mb-2 mr-sm-3">返回
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-primary text-light" style="margin: 5px;" onclick="openAddModal()"> <i
+                    class="fa fa-plus text-light"></i> 添加用户</a>
+            <!--            内容显示主要面板-->
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>用户名</th>
+                    <th>Email地址</th>
+                    <th>手机号码</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>操作</th>
+                </tr>
+<!--                <tr th:each="user,iter:${sysUserList}">-->
+<!--                    <td th:text="${iter.count}"></td>-->
+<!--                    <td th:text="${user.username}"></td>-->
+<!--                    <td th:text="${user.email}"></td>-->
+<!--                    <td th:text="${user.phoneNumber}"></td>-->
+<!--                    <td th:text="${user.status}"></td>-->
+<!--                    <td th:text="${user.createdTime}"></td>-->
+<!--                </tr>-->
+                </thead>
+                <tbody id="tblBody">
+                </tbody>
+            </table>
+            <!--            分页组件-->
+            <div class="row">
+                <div id="pageSize" class="text-primary" style="margin-left: 15px">
+                    <form class="form-inline">
+                        <label id="pageInfo" class="mr-2" for="selectPageSize">dd</label>
+                        <label class="mr-2" for="selectPageSize">每页显示</label>
+                        <select class="custom-select mr-sm-2" id="selectPageSize" onchange="changePageSize()">
+                            <!--                            <option selected>选择</option>-->
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                        <label class="mr-2" for="selectPageSize">条记录</label>
+                    </form>
+                </div>
+                <div class=m-auto id="pager"></div>
+            </div>
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+
+
+<!--添加模态框, modal-lg-->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel"><i class="fa fa-plus text-primary"></i>添加用户</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="addModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--编辑的模态框-->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <!--            <div class="modal-header">-->
+            <!--                <h5 class="modal-title" id="editModalLabel"><i class="fa fa-plus text-primary"></i> 编辑角色</h5>-->
+            <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+            <!--                    <span aria-hidden="true">&times;</span>-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <div class="modal-body" id="editModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--详情模态框-->
+<div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--            弹出框头部-->
+            <!--            <div class="modal-header">-->
+            <!--                <h5 class="modal-title" id="viewModalLabel"><i class="fa fa-plus text-primary"></i> 角色详情</h5>-->
+            <!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+            <!--                    <span aria-hidden="true">&times;</span>-->
+            <!--                </button>-->
+            <!--            </div>-->
+            <div class="modal-body" id="viewModalBody">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="common/layout::footer"></div>
+</body>
+<script th:src="@{/site/js/pagination.js}"></script>
+<script>
+
+</script>
+<script th:inline="javascript">
+
+    let viewUrl = '/sysUser/';
+    let addUrl = '/sysUser/add';
+    let editUrl = '/sysUser/edit/';
+    let delUrl = '/sysUser/delete/';
+    let changeStatusUrl = '/sysUser/changeStatus/';
+
+
+
+    // 默认分页参数
+    let  current=1;
+    let  pageSize=10;
+
+   //分页查询用户
+    function pageQuery() {
+        //分页查询参数
+        let queryParams={
+            current:current,
+            pageSize:pageSize,
+            username:$('#username').val(),
+            email:$('#email').val(),
+            phoneNumber: $('#phoneNumber').val(),
+            status:$('#userStatus').val()
+
+        }
+        console.log(JSON.stringify(queryParams));
+        let config = {
+            method:'post',
+            contentType:'application/json',
+            url: '/sysUser/page',
+            //序列化为json字符串进行传输
+            data:JSON.stringify(queryParams),
+            success: (res) => {
+                showTable('#tblBody', res.data)
+                $('#pageInfo').html(`找到记录共${res.data.totalRows}条, 当前页${current}/${res.data.totalPages}. 范围
+                    ${res.data.startRow}-${res.data.endRow}`)
+                let pagerOptions = {
+                     totalPages: res.data.totalPages,
+                    currentPage: current,
+                    callback:changePageNumber
+                }
+                //初始化分页控件
+                Pagination.create('#pager', pagerOptions)
+            }
+        }
+        $.ajax(config);
+
+    }
+
+    /**
+     * 初始化表格
+     */
+    pageQuery();
+
+    // 渲染表格
+    function showTable(tableId, responseData) {
+        let rows = ``;
+        // 当前记录位置
+        let i = 0;
+        for (; i < responseData.list.length; ++i) {
+            let user = responseData.list[i];
+            // 状态按钮显示
+            let statusText = ` <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="statusSwitch1"
+                             ${user.status == 1 ? 'checked' : ''}
+                             onclick="changeStatus('${user.id}', 0)">
+                            <label class="custom-control-label" for="statusSwitch1"></label>
+                        </div>`;
+            // 操作栏
+            let opText = `  <a class="btn btn-sm btn-success text-light" onclick="openViewModal(${user.id})">
+                            <i class="fa fa-eye"></i> 详情</a>
+                        <a onclick="deleteSysRole(${user.id})" class="btn btn-sm btn-warning ">
+                            <i class="fa fa-remove"></i> 删除</a>
+                        <a onclick="openEditModal(${user.id})" class="btn btn-sm btn-info text-light">
+                            <i class="fa fa-edit"></i> 编辑</a>
+                        <a onclick="resetassword(${user.id})" class="btn btn-sm btn-secondary text-light">
+                            <i class="fa fa-key"></i>重置密码</a>`;
+            rows += `<tr>
+                    <td>${responseData.startRow+i}</td>
+                    <td>${user.username}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phoneNumber}</td>
+                    <td>${statusText}</td>
+                    <td>${user.createdTime}</td>
+                    <td>${opText}</td>
+                    </tr>
+                    `
+        }
+        // 如果不存在记录
+        if (i == 0) {
+            rows = `<tr><td class="text-center" colspan="7">没有相关记录</td></tr>`;
+        }
+        $(tableId).html(rows);
+    }
+
+    // 切换当前页
+    function changePageNumber(currentPage) {
+      current=currentPage;
+      console.log("调用回调方法:"+current)
+        pageQuery();
+    }
+
+    // 改变页面大小
+    function changePageSize() {
+        pageSize=$('#selectPageSize').val();
+        current=1;
+        console.log("pageSize:"+pageSize)
+        pageQuery();
+    }
+
+    // 点击查询按钮的用户查询方法
+    function queryUsers() {
+         current=1;
+         pageQuery();
+    }
+
+    // 重置搜索栏
+    function resetSearchForm() {
+        $('#username').val(''),
+            $('#email').val(''),
+            //重置select控件的值
+            $('#phoneNumber').val(''),
+            $('#userStatus').val(null).trigger("change");
+        current=1;
+        pageQuery();
+    }
+</script>
+
+
+</html>

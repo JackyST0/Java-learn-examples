@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--            内容显示主要面板-->
+<div class="card" th:object="${ticket}">
+    <div class="card-header">
+        <h4>票据ID号# <span th:text="*{id}" }</span></h4>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled">
+            <li>企业名字：<span th:text="*{company}">  </span>
+            </li>
+            <p></p>
+            <li>总金额：<span th:text="*{money}"></span></li>
+            <p></p>
+            <li>主题： <span th:text="*{title} "></span></li>
+            <p></p>
+            <li>票据类型：<span th:text="${@frontUtils.convertTicketType(ticket.ticketType)}"></span></li>
+            <p></p>
+            <li>主要内容：<span th:text="*{body}"></span></li>
+            <p></p>
+            <li> 票据状态：<span th:text="*{status}"></span></li>
+            <p></p>
+            <li> 提交者：<span th:text="*{creator}"></span></li>
+            <p></p>
+            <li> 提交时间：<span th:text="*{createdTime}"></span></li>
+            <p></p>
+        </ul>
+        <div id="result">
+            <p class="text-success">附件列表</p>
+            <th:block th:each="file,status:${ticket.attachments}">
+                <p><span th:text="${status.count}"></span>: <i class="fa fa-paperclip"></i>文件名:<span
+                        th:text="${file.originalFileName}"></span>;大小：
+                    <span th:text="${file.fileSize}"></span>字节;<a th:href="@{${file.fileUrl}}">下载</a></p>
+            </th:block>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <button type="button" class="offset-9 col-md-1 btn btn-warning " style="margin-right: 15px"><i
+                    class="fa fa-edit"></i>编辑
+            </button>
+            <button type="button" class="col-md-1  btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i>关闭
+            </button>
+        </div>
+    </div>
+</div>
+

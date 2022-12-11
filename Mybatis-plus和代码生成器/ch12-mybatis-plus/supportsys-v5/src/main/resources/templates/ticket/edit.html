@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--            内容显示主要面板-->
+<div class="card" th:object="${ticket}">
+    <div class="card-header">
+        <span class="font-weight-bold" style="font-size: 20px">编辑票据—ID#<span th:text="*{id}"></span></span>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <form class="needs-validation" th:action="@{/ticket/edit}" method="post" novalidate id="ticketForm">
+            <!--                        使用隐藏字段传送id-->
+            <input type="text" hidden name="id" th:value="*{id}">
+            <input type="text" hidden name="creator" th:value="*{creator}">
+            <div class="mb-3">
+                <label for="title">标题 <span class="text-muted">(必填)</span></label>
+                <input type="text" name="title" th:value="*{title}" class="form-control col-md-6"
+                       id="title"
+                       placeholder="请输入票据标题">
+            </div>
+            <div class="mb-3">
+                <label for="companyName">公司名称 <span class="text-muted">(必填)</span></label>
+                <input type="text" name="company" th:value="*{company}" class="form-control col-md-6"
+                       id="companyName" placeholder="请输入公司名称">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="money">金额<span class="text-muted">(必填)</span></label>
+                    <input type="text" name="money" th:value="*{money}" class="form-control" id="money"
+                           placeholder="请输入金额" value=""
+                           required="">
+                </div>
+                <div class="col-md-5 mb-3">
+                    <label for="ticketType">票据类型</label>
+                    <!--                                调用后台的枚举型方法-->
+                    <select class="custom-select d-block w-100" id="ticketType" name="ticketType"
+                            required="">
+                        <option disabled>请选择</option>
+                        <option th:each="item : ${ticketType}"
+                                th:value="${item.code}" th:text="${item.value}"
+                                th:selected="${item.value eq ticket.ticketType}">
+                        <option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="ticketBody">内容</label>
+                <textarea class="form-control" id="ticketBody" name="body" th:value="*{body}"
+                          rows="5">购买办公用品、服务器1批，共10000元..</textarea>
+                </textarea>
+            </div>
+            <!--                        提交的按钮-->
+            <div class="row">
+                <button  type="button"   class="offset-9 col-md-1 btn btn-warning " data-dismiss="modal"
+                        style="margin-right: 15px"><i class="fa fa-close"></i>关闭
+                </button>
+                <button type="button" class=" col-md-1  btn btn-primary"><i class="fa fa-save"></i>保存
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

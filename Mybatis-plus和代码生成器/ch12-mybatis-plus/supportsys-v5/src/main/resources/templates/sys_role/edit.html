@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<div class="card" th:object="${sysRole}">
+    <div class="card-header">
+        <span class="font-weight-bold" style="font-size: 20px">编辑角色—ID#<span th:text="*{id}"></span></span>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <!--            内容显示主要面板-->
+        <form class="needs-validation" novalidate id="ticketForm">
+            <!--                        使用隐藏字段传送id-->
+            <input type="text" hidden name="id" th:value="*{id}">
+            <div class="mb-3">
+                <label for="role">角色标识符(英文大写)<span class="text-muted">(必填)</span></label>
+                <input type="text" th:value="*{role}" id="role" name="role" class="form-control"
+                       placeholder="请输入角色标识符">
+            </div>
+            <div class="mb-3">
+                <label for="roleName">角色中文名<span class="text-muted">(必填)</span></label>
+                <input type="text" name="role" th:value="*{roleName}" class="form-control"
+                       id="roleName" placeholder="请输入角色中文名">
+            </div>
+            <div class="mb-3">
+                <label class="" style="margin-right: 10px">状态</label>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="1" id="customRadioInline1" name="status" class="custom-control-input"
+                           th:checked="*{status==1}">
+                    <label class="custom-control-label" for="customRadioInline1">正常</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="0" id="customRadioInline2" name="status" class="custom-control-input"
+                           th:checked="*{status==0}">
+                    <label class="custom-control-label" for="customRadioInline2">停用</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description">描述信息</label>
+                <textarea class="form-control" id="description" name="description" th:text="*{description}"
+                          rows="5">......</textarea>
+                </textarea>
+            </div>
+
+            <div class="row">
+                <button type="button" class="offset-8 btn btn-secondary" data-dismiss="modal"
+                        style="margin-right: 15px">关闭
+                </button>
+                <button type="button" class=" btn btn-primary" style="margin-left:20px" onclick="update()">更新
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function update() {
+        let updateUrl='/sysRole/update'
+        //转化为json对象
+        let data = {
+            id: $('input[name="id"]').val(),
+            role: $('#role').val(),
+            roleName: $('#roleName').val(),
+            // 获取radio控件checked状态的值
+            status: $('input[name="status"]:checked').val(),
+            description: $('#description').val(),
+        }
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: updateUrl,
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                Message.success("角色修改成功!");
+                //隐藏模态框
+                $('#editModal').modal('hide');
+                //重新刷新当前页面
+                setTimeout(() => window.open("/sysRole", "_self"), 500);
+            }
+        }
+        $.ajax(config);
+    }
+</script>

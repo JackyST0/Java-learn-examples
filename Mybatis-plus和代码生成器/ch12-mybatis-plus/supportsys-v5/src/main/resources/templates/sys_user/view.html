@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--            内容显示主要面板-->
+<div class="card" th:object="${sysRole}">
+    <div class="card-header">
+        <h4>角色ID号# <span th:text="*{id}"></span></h4>
+    </div>
+    <div class="card-body">
+        <ul class="list-unstyled">
+            <li>角色标识符：<span th:text="*{role}">  </span>
+            </li>
+            <p></p>
+            <li>角色中文名：<span th:text="*{roleName}"></span></li>
+            <p></p>
+            <li>状态：
+                <span style="font-size: 15px" th:if="*{status==1}" class="badge  badge-pill badge-success"
+                      th:text="正常"></span>
+                <span style="font-size: 15px" th:if="*{status==0}" class="badge  badge-pill badge-secondary"
+                      th:text="停用"></span>
+            </li>
+            <p></p>
+            <li> 描述：<span th:text="*{description}"></span></li>
+            <p></p>
+            <li> 创建时间：<span th:text="*{createdTime}"></span></li>
+            <p></p>
+        </ul>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <button type="button" class="offset-7  btn btn-warning " onclick="showEditDlg()" style="margin-right: 15px"><i
+                    class="fa fa-edit"></i>编辑
+            </button>
+            <button type="button" class="  btn btn-primary" data-dismiss="modal"><i class="fa fa-close"></i>关闭
+            </button>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    function showEditDlg() {
+        //隐藏当前对话框
+        $('#viewModal').modal('hide');
+        //打开编辑对话框
+        openEditModal([[${sysRole.id}]]);
+    }
+</script>
