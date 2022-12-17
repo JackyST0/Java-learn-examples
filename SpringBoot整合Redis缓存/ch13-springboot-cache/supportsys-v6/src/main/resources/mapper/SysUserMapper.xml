@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaee.supportsysv6.persistence.mapper.SysUserMapper">
+    <select id="pageQuery" resultType="com.javaee.supportsysv6.persistence.entity.SysUser">
+        select * from sys_user u
+        <where>
+            <if test="username != null and username != ''">
+                AND u.username like concat('%', #{username}, '%')
+            </if>
+            <if test="status != null">
+                AND u.status = #{status}
+            </if>
+            <if test="phoneNumber != null and phoneNumber != ''">
+                AND u.phone_number like concat('%', #{phoneNumber}, '%')
+            </if>
+            <if test="email != null and email != ''">
+                AND u.email like concat('%', #{email}, '%')
+            </if>
+        </where>
+    </select>
+</mapper>

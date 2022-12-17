@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--            内容显示主要面板-->
+<form class="needs-validation" th:action="@{/ticket/add}" method="post" novalidate id="ticketForm">
+    <div class="mb-3">
+        <label for="role">角色标识符(英文大写)<span class="text-muted">(必填)</span></label>
+        <input type="text" value="ADMIN" id="role" name="role" class="form-control"
+               placeholder="请输入角色标识符">
+    </div>
+    <div class="mb-3">
+        <label for="roleName">角色中文名<span class="text-muted">(必填)</span></label>
+        <input type="text" name="role" value="普通管理员" class="form-control"
+               id="roleName" placeholder="请输入角色中文名">
+    </div>
+    <div class="mb-3">
+        <label class="" style="margin-right: 10px">状态</label>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="1" id="customRadioInline1" name="status" class="custom-control-input" checked>
+            <label class="custom-control-label" for="customRadioInline1">正常</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" value="0" id="customRadioInline2" name="status" class="custom-control-input">
+            <label class="custom-control-label" for="customRadioInline2">停用</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="description">描述信息</label>
+        <textarea class="form-control" id="description" name="body"
+                  rows="5">......</textarea>
+        </textarea>
+    </div>
+
+    <div class="row">
+        <button type="button" class="offset-8 btn btn-secondary" data-dismiss="modal"
+                style="margin-right: 15px">关闭
+        </button>
+        <button type="button" class=" btn btn-primary" style="margin-left:20px" onclick="add()">提交
+        </button>
+    </div>
+</form>
+<script>
+    /**
+     *添加角色
+     */
+    function add() {
+        //转化为json对象
+        let data = {
+            role: $('#role').val(),
+            roleName: $('#roleName').val(),
+            status: $('input[name="status"]:checked').val(),
+            description: $('#description').val(),
+        }
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: '/sysRole/add',
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                Message.success("角色添加成功!");
+
+                $('#addModal').modal('hide');
+                //重新刷新当前页面
+                setTimeout(() => window.open("/sysRole", "_self"), 500);
+            }
+        }
+        $.ajax(config);
+    }
+</script>

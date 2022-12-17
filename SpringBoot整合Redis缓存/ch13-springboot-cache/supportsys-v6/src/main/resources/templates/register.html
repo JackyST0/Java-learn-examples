@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>用户注册</title>
+    <link rel="stylesheet" th:href="@{/assets/bootstrap4/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/message/message.css}"/>
+    <!-- Custom styles for this template -->
+    <link th:href="@{/site/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+
+<form class="form-signin">
+    <img class="mb-4" th:src="@{/site/img/site.jpg}" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">用户注册</h1>
+    <label for="username" class="float-left">用户名</label>
+    <input type="text" id="username" class="form-control mb-1" placeholder="输入用户名" required autofocus>
+    <label for="password" class="float-left ">密码</label>
+    <input type="password" id="password" class="form-control mb-1" placeholder="输入登录密码" required>
+
+    <label for="rePassword" class="float-left text-primary ">再次输入登录密码</label>
+    <input type="password" id="rePassword" class="form-control mb-1" placeholder="再次输入登录密码" required>
+
+    <label for="email" class="float-left ">电子邮箱</label>
+    <input type="email" id="email" class="form-control mb-1" placeholder="输入电子邮箱" required>
+    <div class="row">
+        <div class="checkbox float-left col-md-7 mb-1">
+            <label>
+                <input type="checkbox" value="remember-me"> 我已阅读并同意服务条款
+            </label>
+        </div>
+        <div class="col-md-4"><a th:href="@{/login}">账号登录</a></div>
+    </div>
+    <button class="btn btn-lg btn-success btn-block" type="button" onclick="register()">注册</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+</form>
+<script th:src="@{/assets/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/bootstrap4/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/metismenu/metisMenu.js}"></script>
+<script th:src="@{/assets/message/message.js}"></script>
+<script>
+
+    function register() {
+        //转化为json对象
+        let data = {
+            username: $('#username').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            rePassword: $('#rePassword').val()
+        }
+        console.log(' ' + JSON.stringify(data))
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: '/register',
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                if (res.code === 200) {
+                    Message.success("用户注册成功!");
+                    // 跳转到登录页面
+                    setTimeout(() => window.open("/login", "_self"), 500);
+                } else {
+                    console.log(JSON.stringify(res))
+                    Message.error(res.data);
+                }
+            }
+        }
+        $.ajax(config);
+    }
+</script>
+</body>
+</html>

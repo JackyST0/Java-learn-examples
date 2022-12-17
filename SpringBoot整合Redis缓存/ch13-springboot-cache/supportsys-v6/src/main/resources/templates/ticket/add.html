@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<!--            内容显示主要面板-->
+<form class="needs-validation" th:action="@{/ticket/add}" method="post" novalidate id="ticketForm">
+    <div class="mb-3">
+        <label for="title">标题 <span class="text-muted">(必填)</span></label>
+        <input type="text" value="测试票据标题1" id="title" name="title" class="form-control col-md-6"
+
+               placeholder="请输入票据标题">
+    </div>
+    <div class="mb-3">
+        <label for="companyName">公司名称 <span class="text-muted">(必填)</span></label>
+        <input type="text" name="company" value="测试票据公司1" class="form-control col-md-6"
+               id="companyName" placeholder="请输入公司名称">
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="money">金额<span class="text-muted">(必填)</span></label>
+            <input type="text" name="money" class="form-control" id="money"
+                   placeholder="请输入金额" value="9999"
+                   required="">
+        </div>
+        <div class="col-md-5 mb-3">
+            <label for="ticketType">票据类型</label>
+            <!--                                调用后台的枚举型方法-->
+            <select class="custom-select d-block w-100" id="ticketType" name="ticketType"
+                    required="">
+                <option disabled>请选择</option>
+                <option th:each="item : ${ticketType}"
+                        th:value="${item.code}" th:text="${item.value}">
+                <option>
+            </select>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="ticketBody">内容</label>
+        <textarea class="form-control" id="ticketBody" name="body"
+                  rows="5">默认测试内容;购买办公用品、办公椅、书柜书架1批，清单共20项..</textarea>
+        </textarea>
+    </div>
+    <label class="form-label">添加附件(不允许超过3个附件)</label>
+    <div class="mb-3 row">
+        <div style="padding-top:6px;margin-left:20px;margin-right:20px">
+            <a href="#" class="text-primary" onclick="openFileBrowser()"> <i class="fa fa-paperclip"></i> 选择附件</a>
+            <input type="file" name="file" id="formFile" hidden onchange="fileSelected(this)">
+        </div>
+        <div>
+            <label class="text-primary " id="fileInfo" style="padding-top:6px;margin-right:10px"></label>
+            <!--    button按钮需要放在form的外面或者使用type=button,不然默认会提交表单-->
+            <button type="button" class="btn-warning btn-sm" style="width: 80px; "
+                    onclick="ajaxUpload()"
+                    id="btnUpload">上传
+            </button>
+        </div>
+        <!--        文件上传进度条-->
+        <div class="col-sm" style="padding-top:8px;margin-left:10px">
+            <div class="progress" id="progressDiv" hidden>
+                <div class="progress-bar bg-success" role="progressbar" id="uploadProgress" style="width:0%;"
+                     aria-valuenow="25"
+                     aria-valuemin="0" aria-valuemax="100">0%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--    显示附件列表-->
+    <div id="fileList"></div>
+    <div class="row">
+        <button type="button" class="offset-8 col-md-1 btn btn-secondary" data-dismiss="modal"
+                style="margin-right: 15px">关闭
+        </button>
+        <button type="button" class=" col-md-1  btn btn-info" onclick="addTicket('save')">保存
+        </button>
+        <button type="button" class="col-md-1 btn btn-primary" style="margin-left:20px" onclick="addTicket('submit')">提交
+        </button>
+    </div>
+</form>
+<script>
+    /**
+     * 提交JSON格式数据
+     */
+    // let addUrl = '/ticket/add';
+    //前端校验代码
+    let numberOfUploadFiles = 0;
+    let maxNumberOfUploadFile = 3;
+    let ticketUUID = '';
+
+    /**
+     * 保存票据到草稿箱
+     * @param opertaionType 操作类型，表示保存或者提交 save, submit
+     */
+    function addTicket(opertaionType) {
+        //转化为json对象
+        let data = {
+            ticket: {
+                title: $('#title').val(),
+                company: $('#companyName').val(),
+                ticketUuid: ticketUUID,
+                money: $('#money').val(),
+                ticketType: $('#ticketType').val(),
+                body: $('#ticketBody').val()
+            },
+            //操作类型
+            operationType: opertaionType
+        }
+        //判断是否存在ticketUUID,如果存在，则更新现有票据,否则添加到新的票据
+        let dstUrl='/ticket/add';
+        if (ticketUUID!==''){
+            dstUrl = '/ticket/edit';
+        }
+
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: dstUrl,
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                Message.success("票据添加成功!");
+                //显示数据
+                $('#addModal').modal('hide');
+                //重新刷新当前页面
+                setTimeout(() => window.open("/ticket", "_self"), 1000);
+            }
+        }
+        $.ajax(config);
+    }
+
+    /**
+     * 打开文件浏览窗口
+     */
+    function openFileBrowser() {
+        // 启动文件选择
+        $("#formFile").click();
+        return false;
+    }
+
+    /**
+     * 使用Ajax上传文件,不需要刷新页面
+     */
+    function ajaxUpload() {
+        //判断是否选择上传的文件
+        if ($('#formFile').val() === '') {
+            alert("请先选择上传文件")
+            return
+        }
+        //判断文件数量是否超过3项
+        if (numberOfUploadFiles >= maxNumberOfUploadFile) {
+            alert("文件上传数量已经超过" + maxNumberOfUploadFile + ",无法上传新文件");
+            return;
+        }
+        // 创建表单对象
+        let formData = new FormData();
+        //获取文件对象,get(0)将jquery对象转换为javascript对象, files[0]表示第一文件对象
+        formData.append("file", $('#formFile').get(0).files[0]);
+        formData.append("ticketUUID", ticketUUID);
+
+        //显示进度条并重置进度条进度值
+        $('#uploadProgress').css('width', 0).html('0%');
+        $('#progressDiv').removeAttr('hidden');
+        $('#progressDiv').show();
+        // ajax提交文件上传请求
+        $.ajax({
+            method: 'post',
+            url: '/ticket/uploadAttachment',
+            data: formData,                //表单数据
+            processData: false,     // jquery 不要去处理发送的数据
+            contentType: false,
+            success: function (res) {
+                console.log(res);
+                ticketUUID = res.data.ticketUuid;
+                numberOfUploadFiles = res.data.attachments.length;
+                displayUploadFiles(ticketUUID, res.data.attachments);
+                Message.success("附件上传成功!");
+                //清空文件选择控件
+                $('#formFile').val('')
+                $('#progressDiv').hide()
+                $('#fileInfo').hide()
+            },
+            //请求失败触发的方法
+            error: function () {
+                console.log("ajax请求失败");
+            },
+            /**
+             * xhr事情用于显示进度条，如果不要显示进度条，可以把这部分代码注释掉
+             */
+            xhr: function () {
+                var xhr = new XMLHttpRequest();
+                //使用XMLHttpRequest.upload监听上传过程，注册progress事件，打印回调函数中的event事件
+                xhr.upload.addEventListener('progress', function (e) {
+                    //loaded代表上传了多少,total代表总数为多少
+                    let rate = ((e.loaded / e.total) * 100).toFixed(0) + '%';
+                    console.log(rate)
+                    //获取进度条的子节点progress-bar，并修改其样式达到效果
+                    $('#uploadProgress').css('width', rate).html(rate);
+                })
+                return xhr;
+            },
+        })
+    }
+
+    /**
+     * 响应选择文件事件
+     */
+    function fileSelected(obj) {
+        //获取当前元素
+        let file = $(obj).get(0).files[0];  // 获取当前选择的文件,获取第一个文件对象
+        //显示文件信息和上传按钮
+        if (file != null) {
+            $("#fileInfo").html(`<i class="fa fa fa-file-o"></i> ${file.name}; 共${calFileSize(file.size)}`);
+            $('#btnUpload').removeAttr('hidden');
+            $('#fileInfo').show()
+        } else {
+            $('#fileInfo').empty();
+        }
+    }
+
+    /**
+     * 将文件大小转换为可读形式，保留两位小数
+     */
+    function calFileSize(size) {
+        let fileSize = 0;
+        if (size > 1024 * 1024 * 1024)
+            fileSize = (Math.round(size * 100 / (1024 * 1024 * 1024 * 100))).toFixed(2).toString() + 'GB';
+        else if (size > 1024 * 1024)
+            fileSize = (Math.round(size * 100 / (1024 * 1024 * 100))).toFixed(2).toString() + 'MB';
+        else
+            fileSize = (Math.round(size * 100 / (1024 * 100))).toFixed(2).toString() + 'KB';
+        return fileSize;
+    }
+
+
+    /**
+     * 显示已经上传的文件信息
+     */
+    function displayUploadFiles(ticketUUID, uploadFiles) {
+        let text = `<ul>`;
+        for (i = 0; i < uploadFiles.length; i++) {
+            text +=
+                `<li>附件${i + 1}: <i class="fa fa-paperclip"></i> ${uploadFiles[i].originalFileName}(${calFileSize(uploadFiles[i].fileSize)})`
+                +
+                `   <a style="margin-right: 10px;margin-left: 15px" href="${uploadFiles[i].saveFileName}?m=online" target="_blank"><i class="fa fa-eye text-primary"></i>  预览</a> `
+                +
+                `   <a  style="margin-right: 10px" href="${uploadFiles[i].saveFileName}?m=download"><i class="fa fa-download"></i>  下载</a>`
+                +
+                `   <a  href="javascript:void(0);" onclick="deleteFile('${ticketUUID}','${uploadFiles[i].saveFileName}')"> <i class="fa fa-remove text-primary"></i>  删除</a></li>`;
+        }
+        text += `</ul>`;
+        console.log(text)
+        $('#fileList').html(text);
+    }
+
+    /**
+     * 删除文件
+     */
+    function deleteFile(ticketUUID, fileName) {
+        let deleteUrl = "/ticket/attachment/delete/";
+        let config = {
+            method: 'post',
+            // 处理URL路径参数存在空格的问题
+            url: encodeURI(deleteUrl + ticketUUID + "/" + fileName),
+            success: (res) => {
+                Message.success("附件删除成功!");
+                //显示附件列表
+                displayUploadFiles(ticketUUID, res.data.attachments);
+                numberOfUploadFiles = res.data.attachments.length;
+            }
+        }
+        $.ajax(config);
+    }
+
+</script>

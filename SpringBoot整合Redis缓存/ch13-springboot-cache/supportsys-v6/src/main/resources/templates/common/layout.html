@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+<!--    传入参数title-->
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" th:href="@{/assets/bootstrap4/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/site/css/mysite.css}"/>
+
+    <!--    加载metisMenu所用样式-->
+    <link rel="stylesheet" th:href="@{/assets/metismenu/metisMenu.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/metismenu/mm-vertical.css}"/>
+<!--    bootstrap-table样式-->
+    <link rel="stylesheet" th:href="@{/assets/bootstrap-table/bootstrap-table.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/message/message.css}"/>
+</head>
+<body>
+<!--头部导航栏-->
+<header class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" th:fragment="header">
+    <a class="navbar-brand" href="#">领航票据管理系统</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="text"
+                   placeholder="查询关键词"
+                   aria-label="Search">
+            <button class="btn
+             btn-warning my-2 my-sm-0"
+                    type="submit">搜索
+            </button>
+        </form>
+        <a href="#" class="btn btn-outline-success my-2 my-sm-0"
+           style="margin-right: 5px;margin-left: 10px"
+           type="submit">登录</a> <a href="#"
+                                   class="btn btn-outline-success my-2 my-sm-0"
+                                   type="submit">注册</a>
+    </div>
+</header>
+<!--//导航栏-->
+<!--页面主体-->
+<main class="container-fluid main">
+    <div class="row">
+        <!--    侧边导航栏-->
+        <aside class="col-md-2 my-aside" th:fragment="side_menu">
+            <nav class="sidebar-nav">
+<!--                菜单导航-->
+                <ul id="menu">
+                    <li class="">
+                        <a href="#" aria-expanded="false">
+                            <i class="fa fa-home fa-fw fa-lg"></i>主页</a>
+                    </li>
+                    <li class="mm-active">
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-ticket fa-fw fa-lg"></i>票据管理</a>
+                        <ul>
+                            <li><a th:href="@{/ticket}">票据列表</a></li>
+                            <li><a th:href="@{/ticket/draft}">草稿箱</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="mm-active">
+                        <a class="has-arrow" href="#" aria-expanded="false">
+                            <i class="fa fa-archive fa-fw fa-lg"></i>系统管理</a>
+                        <ul>
+                            <li><a th:href="@{/sysUser}">用户管理</a></li>
+                            <li><a th:href="@{/sysRole}">角色管理</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        <!--        //ened of 侧边导航栏-->
+        <div class="col-md-10">
+            <!--面包屑-->
+            <div class="breadcrumb bg-white" style="margin-bottom: 0" th:fragment="breadcrumb(subpath)">
+                <a class="breadcrumb-item" href="#"><i class="fa fa-dashboard fa-fw"></i>主页</a>
+                <a class="breadcrumb-item" href="#" th:text="${subpath}"></a>
+            </div>
+            <a class="btn btn-primary" style="margin: 5px;" href="./add.html"> <i
+                    class="fa fa-plus"></i> 添加票据</a>
+            <!--     内容显示主要面板-->
+        </div>
+    </div>
+</main>
+<!//- 页面主体--->
+<footer class="footer mt-auto py-3" th:fragment="footer">
+    <div class="text-center">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+    <script th:src="@{/assets/jquery/jquery.min.js}"></script>
+    <script th:src="@{/assets/bootstrap4/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/metismenu/metisMenu.js}"></script>
+    <script th:src="@{/assets/message/message.js}"></script>
+    <script th:src="@{/assets/bootstrap-table/bootstrap-table.min.js}"></script>
+
+    <script th:src="@{/assets/bootstrap-table/bootstrap-table-zh-CN.min.js}"></script>
+    <script>
+        $(function () {
+            $('#menu').metisMenu();
+        })
+    </script>
+</footer>
+
+</body>
+</html>

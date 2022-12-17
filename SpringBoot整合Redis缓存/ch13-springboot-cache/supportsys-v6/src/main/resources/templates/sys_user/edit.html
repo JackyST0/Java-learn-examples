@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="card" th:object="${userVo}">
+    <div class="card-header">
+        <span class="font-weight-bold" style="font-size: 20px">编辑角色—ID#<span th:text="*{id}"></span></span>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="card-body">
+        <form class="needs-validation" method="post" novalidate id="editForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="formUsername">用户名<span class="text-muted">(必填)</span></label>
+                    <input type="text" id="formUsername" readonly th:value="*{username}" name="username"
+                           class="form-control"
+                           placeholder="请输入用户名">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="formEmail">email地址<span class="text-muted">(必填)</span></label>
+                    <input type="text" th:value="*{email}" id="formEmail" name="email" class="form-control"
+                           placeholder="请输入email地址">
+
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="formPhoneNumber">电话号码<span class="text-muted">(必填)</span></label>
+                <input type="text" th:value="*{phoneNumber}" id="formPhoneNumber" name="phoneNumber"
+                       class="form-control"
+                       placeholder="请输入电话号码">
+            </div>
+
+            <div class="mb-3">
+                <label class="" style="margin-right: 10px">状态</label>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="1" id="editStatus1" name="status"
+                           class="custom-control-input" th:checked="*{status==1}">
+                    <label class="custom-control-label" for="editStatus1">正常</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" value="0" id="editStatus2"  th:checked="*{status==0}" name="status"
+                           class="custom-control-input">
+                    <label class="custom-control-label" for="editStatus2">停用</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="" style="margin-right: 10px">角色</label>
+                <!--        循环输出角色列表-->
+                <th:block th:each="item, s:${roleList}">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input " type="checkbox" name="roles" th:id="${'roleRadio'+s.count}"
+                               th:value="${item.id}" th:checked="${@frontUtils.containRole(item.id,userVo.roles)}">
+                        <label class="form-check-label" th:for="${'roleRadio'+s.count}"
+                               th:text="${item.roleName}">1</label>
+                    </div>
+                </th:block>
+            </div>
+
+            <div class="mb-3">
+                <label for="formRemark">备注</label>
+                <textarea class="form-control" id="formRemark" name="remark" th:text="*{remark}"
+                          rows="5">个人信息描述</textarea>
+                </textarea>
+            </div>
+
+            <div class="row">
+                <button type="button" class="offset-8 btn btn-secondary" data-dismiss="modal"
+                        style="margin-right: 15px">关闭
+                </button>
+                <button type="button" class=" btn btn-primary" style="margin-left:20px" onclick="update()">提交
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+<script th:src="@{/site/js/tools.js}"></script>
+<script  th:inline="javascript">
+
+    function update() {
+        //转化为json对象
+        let data = {
+            id: [[${userVo.id}]],
+            email: $('#formEmail').val(),
+            phoneNumber: $('#formPhoneNumber').val(),
+            status: $('input[name="status"]:checked').val(),
+            roles: getCheckBoxValues('roles'),
+            remark: $('#formRemark').val(),
+        }
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: '/sysUser/update',
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                if (res.code === 200) {
+                    Message.success("数据更新成功!");
+                    $('#editModal').modal('hide');
+                    //重新刷新当前页面
+                    $('#table').bootstrapTable('refresh');
+                } else {
+                    Message.error(res.data);
+                    return;
+                }
+            }
+        }
+        $.ajax(config);
+    }
+</script>

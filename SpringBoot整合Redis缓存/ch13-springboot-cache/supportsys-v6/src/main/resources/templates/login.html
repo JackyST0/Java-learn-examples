@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>欢迎登录</title>
+    <link rel="stylesheet" th:href="@{/assets/bootstrap4/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/fonts/font-awesome.min.css}"/>
+    <link rel="stylesheet" th:href="@{/assets/message/message.css}"/>
+      <!-- Custom styles for this template -->
+    <link th:href="@{/site/css/signin.css}" rel="stylesheet">
+</head>
+<body class="text-center">
+
+<form class="form-signin">
+    <img class="mb-4" th:src="@{/site/img/site.jpg}" alt="" width="92">
+    <h1 class="h3 mb-3 font-weight-normal">欢迎登录</h1>
+    <label for="username" class="float-left">用户名</label>
+    <input type="text" id="username" name="username" th:value="${username}" class="form-control mb-3"
+           placeholder="输入用户名"
+           required
+           autofocus>
+    <label for="password" class="float-left ">密码</label>
+    <input type="password" id="password" name="password" th:value="${password}" class="form-control mb-2"
+           placeholder="输入密码"
+           required>
+    <div class="row">
+        <div class="checkbox col-md-3 float-left mb-2">
+            <label>
+                <input type="checkbox" name="rememberMe" value="remember-me">记住我
+            </label>
+        </div>
+        <div class="offset-6"><a th:href="@{/register}">点击注册</a></div>
+    </div>
+
+    <button class="btn btn-lg btn-success btn-block" onclick="login()" type="button">登录</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
+</form>
+<script th:src="@{/assets/jquery/jquery.min.js}"></script>
+<script th:src="@{/assets/bootstrap4/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/metismenu/metisMenu.js}"></script>
+<script th:src="@{/assets/message/message.js}"></script>
+<script>
+    function login() {
+        //转化为json对象
+        let data = {
+            username: $('#username').val(),
+            password: $('#password').val(),
+        }
+        console.log(' ' + JSON.stringify(data))
+        let config = {
+            method: 'post',
+            contentType: 'application/json',
+            url: '/login',
+            //序列化为json字符串进行传输
+            data: JSON.stringify(data),
+            success: (res) => {
+                if (res.code === 200) {
+                    Message.success("登录成功!");
+                    // 跳转到登录页面
+                    setTimeout(() => window.open("/ticket", "_self"), 500);
+                } else {
+                    console.log(JSON.stringify(res))
+                    Message.error(res.data);
+                    $('#username').val('');
+                    $('#password').val('');
+                }
+            }
+        }
+        $.ajax(config);
+    }
+</script>
+</body>
+</html>
