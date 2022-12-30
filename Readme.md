@@ -14,7 +14,7 @@
     - 理解单例模式的实现
     - 掌握 Spring 装配 Bean 的三种主要方式
     - 掌握 Spring 上下文初始化的基本方法
-    - 掌握 Spring 的常用注解
+    - 掌握 Spring 的常用注解v
 ----------
 3. ### SpringBoot基础与核心注解
     - 理解 Spring Boot 的工作原理
@@ -74,4 +74,18 @@
     - 掌握axios和后端的交互过程
     - 理解分页的底层实现与SQL语句
 ----------
+13. ### Mybatis-plus 和代码生成器
+    - 了解Mybatis-plus特点及其基本使用
+    - 掌握Mybatis的基本API接口
+    - 掌握Mybatis-plus通用Mapper类的使用
+    - 掌握Mybatis-plus通用Service类接口用法
+    - 掌握Mybatis-plus的查询器使用
+----------
+14. ### SpringBoot 整合 Redis 缓存
+    - 了解 Spring Boot 的缓存机制
+    - 基于注解的 Redis 缓存实现
+    - 修改基于注解的序列化方式
+    - 基于自定义 RedisTemplate 的缓存实现
+    - 修改基于 RedisTemplate 的序列化方式
+
 
