@@ -8,7 +8,7 @@
     - 理解过滤器Filter的工作原理
     - 掌握Filter的应用情景和常用过滤器的编写
 ----------
-2. ### 反射技术与Spring Ioc
+2. ### 反射技术与Spring IoC
     - 了解 Spring IOC 的基本概念
     - 理解并熟悉 Java 反射技术
     - 理解单例模式的实现
@@ -35,7 +35,7 @@
     - 掌握 Spring MVC 接收请求参数方式
     - 掌握 Spring MVC 页面跳转方式
 ----------
-6. ### Web进阶—拦截器技术、文件上传下载和JavaScript Ajax技术(Axios)版本
+6. ### Web进阶—拦截器技术、文件上传下载和JavaScript Ajax技术(Axios)
     - 理解Ajax异步传输的原理和工作流程
     - 掌握基于jquery的ajax数据读取和数据提交
     - 掌握单文件、多文件和Ajax文件上传的实现方法
