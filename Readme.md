@@ -14,7 +14,7 @@
     - 理解单例模式的实现
     - 掌握 Spring 装配 Bean 的三种主要方式
     - 掌握 Spring 上下文初始化的基本方法
-    - 掌握 Spring 的常用注解v
+    - 掌握 Spring 的常用注解
 ----------
 3. ### SpringBoot基础与核心注解
     - 理解 Spring Boot 的工作原理
@@ -31,7 +31,7 @@
 ----------
 5. ### Thymeleaf视图层技术
     - 掌握 Spring MVC 请求转发流程
-    - 掌握 Thymleaf 常用标签
+    - 掌握 Thymeleaf 常用标签
     - 掌握 Spring MVC 接收请求参数方式
     - 掌握 Spring MVC 页面跳转方式
 ----------
